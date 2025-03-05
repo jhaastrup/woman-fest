@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import img from "../assets/images/beachParty.png";
-import alatpaylogo from "../assets/images/alatLogo.png";
+import alatpaylogo from "../assets/images/alatLogo.png"; 
+import axios from "axios";
 
 const CustomerDetails: React.FC = () => {
   const [alatPayInitialized, setAlatPayInitialized] = useState(false);
@@ -71,27 +72,39 @@ const CustomerDetails: React.FC = () => {
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
+    const data: Record<string, any> = Object.fromEntries(formData.entries());
   
-    const googleSheetWebhook = "https://script.google.com/macros/s/AKfycby9vLnnYwqp6dsqgbLxH7ATUnAgR4e-j-KvFwFeEXXGdMWIHiBauwtBCP9gowhFOKXz/exec";
+    const googleSheetWebhook = "https://script.google.com/macros/s/AKfycbwyMWOJKgQ62I82rTx2gUQPOb8XAAiI2A-NExsqk0eYl9zMraeZLR-nAo6Fftl-Az0f/exec";
+  
+    console.log("Submitting data:", data);
   
     try {
       const response = await fetch(googleSheetWebhook, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: JSON.stringify(data),
+        //body: new URLSearchParams(data).toString(),
       });
-  
+    
+      const result = await response.json();
+      console.log("Google Sheets Response:", result);
+    
       if (response.ok) {
-        console.log("Data sent to Google Sheet");
         alert("Form submitted successfully!");
       } else {
-        console.error("Error submitting data:", response.statusText);
         alert("Error submitting form.");
       }
     } catch (error) {
       console.error("Request failed:", error);
       alert("Network error. Please try again.");
+    }
+    
+  
+    // Ensure AlatPay script is loaded
+    if (!(window as any).Alatpay) {
+      console.error("AlatPay script not loaded.");
+      alert("Payment system not initialized. Please try again.");
+      return;
     }
   
     // Proceed with AlatPay payment
@@ -102,7 +115,7 @@ const CustomerDetails: React.FC = () => {
       phone: data.phone,
       firstName: data.firstName,
       lastName: data.lastName,
-      amount: 100,
+      amount: parseInt(data.amount, 10) || 100,
       currency: data.currency,
       metadata: data.metaData || "",
       onTransaction: (response: any) => {
@@ -112,7 +125,7 @@ const CustomerDetails: React.FC = () => {
     };
   
     try {
-      const newPopup = (window as any).Alatpay?.setup(config);
+      const newPopup = (window as any).Alatpay.setup(config);
       if (newPopup) {
         newPopup.show();
       } else {
@@ -122,6 +135,8 @@ const CustomerDetails: React.FC = () => {
       console.error("Error initializing AlatPay:", error);
     }
   };
+  
+  
   
   
 
@@ -137,14 +152,9 @@ const CustomerDetails: React.FC = () => {
           Beach_terhousesport Festival
         </p>
       </div>
-      <form name="contact"  netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <form name="contact" onSubmit={submit} method="POST" >
         <div className="flex flex-col gap-6 mt-8">
         <input type="hidden" name="form-name" value="contact" />
-         <p className="hidden">
-        <label>
-        <input name="bot-field" />
-      </label>
-      </p>
 
           <div className="flex flex-col md:flex-row gap-8 w-full">
             <div className="w-full"> 
