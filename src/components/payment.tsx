@@ -73,16 +73,28 @@ const CustomerDetails: React.FC = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
   
-    // Send form data to Netlify
-    fetch("/" + location.pathname, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ "form-name": "contact", ...data }).toString(),
-    })
-      .then(() => console.log("Form submitted to Netlify"))
-      .catch((error) => console.error("Error submitting form:", error));
+    const googleSheetWebhook = "https://script.google.com/macros/s/AKfycby9vLnnYwqp6dsqgbLxH7ATUnAgR4e-j-KvFwFeEXXGdMWIHiBauwtBCP9gowhFOKXz/exec";
   
-    // AlatPay Configuration
+    try {
+      const response = await fetch(googleSheetWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        console.log("Data sent to Google Sheet");
+        alert("Form submitted successfully!");
+      } else {
+        console.error("Error submitting data:", response.statusText);
+        alert("Error submitting form.");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      alert("Network error. Please try again.");
+    }
+  
+    // Proceed with AlatPay payment
     const config = {
       apiKey: "af578298aec04578beb7f9b70828ad70",
       businessId: "1ada836e-ba62-4146-db8b-08dd4ac0a01c",
@@ -95,15 +107,13 @@ const CustomerDetails: React.FC = () => {
       metadata: data.metaData || "",
       onTransaction: (response: any) => {
         console.log("Transaction successful:", response);
-        e.currentTarget.submit(); // Submit the form to Netlify after payment success
       },
-      onClose: () => console.log("Payment gateway is closed."),
+      onClose: () => console.log("Payment gateway closed."),
     };
   
     try {
       const newPopup = (window as any).Alatpay?.setup(config);
       if (newPopup) {
-        console.log("Popup initialized:", newPopup);
         newPopup.show();
       } else {
         console.error("Failed to initialize AlatPay popup.");
@@ -112,6 +122,7 @@ const CustomerDetails: React.FC = () => {
       console.error("Error initializing AlatPay:", error);
     }
   };
+  
   
 
   return (
@@ -126,7 +137,7 @@ const CustomerDetails: React.FC = () => {
           Beach_terhousesport Festival
         </p>
       </div>
-      <form name="contact" action="/" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <form name="contact"  netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
         <div className="flex flex-col gap-6 mt-8">
         <input type="hidden" name="form-name" value="contact" />
          <p className="hidden">
