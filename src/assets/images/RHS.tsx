@@ -1,7 +1,6 @@
-import React from "react";
 import star from "../../../src/images/star.png";
 import beachBg from "../../../src/images/beach-bg.jpg";
-import Image from "next/image";
+
 
 function RHS() {
   return (
@@ -9,7 +8,7 @@ function RHS() {
       <div className="flex md:flex-col items-center md:gap-5 flex-row">
         <div className="space-y-4 md:w-full w-8/12 ">
           <div className="flex flex-row gap-3">
-            <Image src={star} width={24} height={24} alt="beach_party_logo" className="object-contain"/>
+            <img src={star} width={24} height={24} alt="beach_party_logo" className="object-contain"/>
             <p className="text-[#292524] md:text-xl text-sm font-schoolbell">
               Beach_terhousesport Festival
             </p>
@@ -25,7 +24,7 @@ function RHS() {
           </div>
         </div>
         <div className="md:w-full w-8/12">
-          <Image
+          <img
             alt="beach-Bg"
             src={beachBg}
             width={500}
