@@ -23,7 +23,7 @@ const CustomerDetails: React.FC = () => {
     { value: "Red house", label: "Red House" },
   ];
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  /* const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
@@ -59,7 +59,53 @@ const CustomerDetails: React.FC = () => {
     }
 
    
+  }; */ 
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+  
+    // Send form data to Netlify
+    fetch("/" + location.pathname, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ "form-name": "contact", ...data }).toString(),
+    })
+      .then(() => console.log("Form submitted to Netlify"))
+      .catch((error) => console.error("Error submitting form:", error));
+  
+    // AlatPay Configuration
+    const config = {
+      apiKey: "af578298aec04578beb7f9b70828ad70",
+      businessId: "1ada836e-ba62-4146-db8b-08dd4ac0a01c",
+      email: data.email,
+      phone: data.phone,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      amount: 13000,
+      currency: data.currency,
+      metadata: data.metaData || "",
+      onTransaction: (response: any) => {
+        console.log("Transaction successful:", response);
+        e.currentTarget.submit(); // Submit the form to Netlify after payment success
+      },
+      onClose: () => console.log("Payment gateway is closed."),
+    };
+  
+    try {
+      const newPopup = (window as any).Alatpay?.setup(config);
+      if (newPopup) {
+        console.log("Popup initialized:", newPopup);
+        newPopup.show();
+      } else {
+        console.error("Failed to initialize AlatPay popup.");
+      }
+    } catch (error) {
+      console.error("Error initializing AlatPay:", error);
+    }
   };
+  
 
   return (
     <div className="relative w-full p-10 md:p-12 space-y-5">
@@ -74,9 +120,14 @@ const CustomerDetails: React.FC = () => {
         </p>
       </div>
       <form name="contact" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <p className="hidden">
+      <label>
+       <input name="bot-field" />
+    </label>
+</p>
         <div className="flex flex-col gap-6 mt-8">
           <div className="flex flex-col md:flex-row gap-8 w-full">
-            <div className="w-full">
+            <div className="w-full"> 
               <label className="text-[#57534E] font-normal text-xs">First Name</label>
               <div className="border border-gray-300 p-3 rounded-xl">
                 <input name="firstName" type="text" placeholder="First Name" required className="w-full focus:outline-none" />
