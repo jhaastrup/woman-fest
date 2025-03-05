@@ -68,31 +68,27 @@ const CustomerDetails: React.FC = () => {
    
   }; */ 
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
-  
-    const googleSheetWebhook = "https://script.google.com/macros/s/AKfycby9vLnnYwqp6dsqgbLxH7ATUnAgR4e-j-KvFwFeEXXGdMWIHiBauwtBCP9gowhFOKXz/exec";
-  
-    try {
-      const response = await fetch(googleSheetWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-  
-      if (response.ok) {
-        console.log("Data sent to Google Sheet");
-        alert("Form submitted successfully!");
-      } else {
-        console.error("Error submitting data:", response.statusText);
-        alert("Error submitting form.");
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-      alert("Network error. Please try again.");
-    }
+  const submit = async (data:any) => {
+   
+    
+    const formDatas = new URLSearchParams();
+    formDatas.append("entry.1311444054", data.firstName); 
+    formDatas.append("entry.423445294", data.lastName);  
+    formDatas.append("entry.145421949", data.email);    
+    formDatas.append("entry.1751212579", data.phone);     
+    formDatas.append("entry.410223908", data.amount);     
+    formDatas.append("entry.2023934774", data.colors);     
+
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSdpmc5C0atledFL5jI5Td8S5YyJKGmi5lABH7rWvd0vMLLqng/formResponse", {
+      method: "POST",
+      body: formDatas,
+      mode: "no-cors", 
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+
+    })
+      .then(() => alert("Form submitted successfully!"))
+      .catch((error) => console.error("Error submitting form:", error));
+
   
     // Proceed with AlatPay payment
     const config = {
