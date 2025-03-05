@@ -1,6 +1,6 @@
 import Customer_Details from "./components/payment";
 import RHS from "./components/RHS"; 
-import './globals.css';
+//import './globals.css';
 
 function App() {
   return (
