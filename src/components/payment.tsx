@@ -126,7 +126,7 @@ const CustomerDetails: React.FC = () => {
           Beach_terhousesport Festival
         </p>
       </div>
-      <form name="contact" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <form name="contact" action="/" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
         <div className="flex flex-col gap-6 mt-8">
         <input type="hidden" name="form-name" value="contact" />
          <p className="hidden">
