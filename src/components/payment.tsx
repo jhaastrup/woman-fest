@@ -27,11 +27,18 @@ const CustomerDetails: React.FC = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ "form-name": "contact", ...data }).toString(),
-    });
+
+    try {
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ "form-name": "contact", ...data }).toString(),
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form.");
+    }
+  
     const config = {
       apiKey: "af578298aec04578beb7f9b70828ad70",
       businessId: "1ada836e-ba62-4146-db8b-08dd4ac0a01c",
@@ -120,12 +127,14 @@ const CustomerDetails: React.FC = () => {
         </p>
       </div>
       <form name="contact" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
-      <p className="hidden">
-      <label>
-       <input name="bot-field" />
-    </label>
-</p>
         <div className="flex flex-col gap-6 mt-8">
+        <input type="hidden" name="form-name" value="contact" />
+         <p className="hidden">
+        <label>
+        <input name="bot-field" />
+      </label>
+      </p>
+
           <div className="flex flex-col md:flex-row gap-8 w-full">
             <div className="w-full"> 
               <label className="text-[#57534E] font-normal text-xs">First Name</label>
