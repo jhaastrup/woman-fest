@@ -90,7 +90,7 @@ const CustomerDetails: React.FC = () => {
       phone: data.phone,
       firstName: data.firstName,
       lastName: data.lastName,
-      amount: 13000,
+      amount: 100,
       currency: data.currency,
       metadata: data.metaData || "",
       onTransaction: (response: any) => {
