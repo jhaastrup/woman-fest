@@ -27,7 +27,11 @@ const CustomerDetails: React.FC = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ "form-name": "form-name", ...data }).toString(),
+    });
     const config = {
       apiKey: "af578298aec04578beb7f9b70828ad70",
       businessId: "1ada836e-ba62-4146-db8b-08dd4ac0a01c",
@@ -54,11 +58,7 @@ const CustomerDetails: React.FC = () => {
       console.error("Error initializing AlatPay:", error);
     }
 
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ "form-name": "form-name", ...data }).toString(),
-    });
+   
   };
 
   return (
@@ -67,7 +67,7 @@ const CustomerDetails: React.FC = () => {
         <em>Powered by</em>
         <img src={alatpaylogo} width={25} height={25} alt="alatpay logo" />
       </div>
-      <div className="flex gap-3 flex-row items-center">
+      <div className="flex gap-3 flex-row items-center mt-4">
         <img src={img} width={24} height={24} alt="beach_party_logo" />
         <p className="md:text-base text-sm font-semibold bg-gradient-to-r from-[#022876] to-[#EFAB04] bg-clip-text text-transparent">
           Beach_terhousesport Festival
@@ -98,13 +98,14 @@ const CustomerDetails: React.FC = () => {
           <div className="w-full">
             <label className="text-[#57534E] font-normal text-xs">Phone Number</label>
             <div className="border border-gray-300 p-3 rounded-xl">
-              <input name="phone" type="tel" placeholder="Phone Number" required className="w-full focus:outline-none" />
+              <input name="phone" type="tel" placeholder="Phone Number" required 
+              />
             </div>
           </div>
           <div className="w-full">
             <label className="text-[#57534E] font-normal text-xs">Ticket Package</label>
             <div className="border border-gray-300 p-3 rounded-xl">
-              <input type="text" name="amount" placeholder="₦13,000" className="text-black" />
+              <input type="text" name="amount" placeholder="₦13,000" className="text-black" defaultValue={13000} />
             </div>
           </div>
           <div className="w-full">
