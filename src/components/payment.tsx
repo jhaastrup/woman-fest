@@ -86,8 +86,8 @@ const CustomerDetails: React.FC = () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
 
     })
-      .then(() => alert("Form submitted successfully!"))
-      .catch((error) => console.error("Error submitting form:", error));
+      .then((res) =>res)
+      .catch((error) =>error);
 
   
     // Proceed with AlatPay payment
@@ -133,7 +133,7 @@ const CustomerDetails: React.FC = () => {
           Beach_terhousesport Festival
         </p>
       </div>
-      <form name="contact"  netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <form onSubmit={submit}>
         <div className="flex flex-col gap-6 mt-8">
         <input type="hidden" name="form-name" value="contact" />
          <p className="hidden">
