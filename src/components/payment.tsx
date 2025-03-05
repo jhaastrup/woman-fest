@@ -30,7 +30,7 @@ const CustomerDetails: React.FC = () => {
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ "form-name": "form-name", ...data }).toString(),
+      body: new URLSearchParams({ "form-name": "contact", ...data }).toString(),
     });
     const config = {
       apiKey: "af578298aec04578beb7f9b70828ad70",
@@ -73,7 +73,7 @@ const CustomerDetails: React.FC = () => {
           Beach_terhousesport Festival
         </p>
       </div>
-      <form name="form-name" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
+      <form name="contact" netlify-honeypot="bot-field" onSubmit={submit} method="POST" data-netlify="true">
         <div className="flex flex-col gap-6 mt-8">
           <div className="flex flex-col md:flex-row gap-8 w-full">
             <div className="w-full">
