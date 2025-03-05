@@ -186,7 +186,7 @@ const CustomerDetails: React.FC = () => {
           <div className="w-full">
             <label className="text-[#57534E] font-normal text-xs">Ticket Package</label>
             <div className="border border-gray-300 p-3 rounded-xl">
-              <input type="text" name="amount" placeholder="₦13,000" className="text-black" defaultValue={100} />
+              <input type="text" name="amount" placeholder="₦13,000" className="text-black" defaultValue={13000} />
             </div>
           </div>
           <div className="w-full">
